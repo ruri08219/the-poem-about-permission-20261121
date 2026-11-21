@@ -21,12 +21,15 @@ like a coin warmed by two palms,
 spent, and still ours."""
 
 DESTINATION = Path("/output/entry.txt")
+POEM_MAX_CHARS = 280
 
 
 def main() -> int:
     text = POEM + "\n"
-    if not 1 <= len(text) <= 280:
-        raise ValueError(f"entry must be 1-280 characters, got {len(text)}")
+    if not 1 <= len(text) <= POEM_MAX_CHARS:
+        raise ValueError(f"entry must be 1-{POEM_MAX_CHARS} characters, got {len(text)}")
+    if "\x00" in text:
+        raise ValueError("entry must not contain NUL bytes")
     if not text.strip():
         raise ValueError("entry must not be blank")
     DESTINATION.parent.mkdir(parents=True, exist_ok=True)
